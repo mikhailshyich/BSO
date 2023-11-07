@@ -12,13 +12,14 @@ search_list = []
 search_res = []
 count = 0
 range_count = 0
-# file = ''
+f_number = 0
+s_number = 0
+diap_count = 0
+add_codes = 0
 
 # Настройка окна
 root = tk.Tk()
 root.title("Поиск кодов в файле Excel")
-# root.geometry("500x600")
-# root.resizable(False, False)
 w = root.winfo_screenwidth()
 h = root.winfo_screenheight()
 w = w // 2  # середина экрана
@@ -26,10 +27,7 @@ h = h // 2
 w = w - 450  # смещение от середины
 h = h - 530
 root.geometry('900x1000+{}+{}'.format(w, h))
-font_size = 15
-
-
-# root.attributes("-toolwindow", True)
+font_size = 10
 
 
 def open_file():
@@ -43,7 +41,7 @@ def open_file():
         # list_mark = file.iloc[:,0].tolist()
         print("Коды: {0}".format(list_mark))
         print("Файл прочитан. Кодов в файле - {0}".format(len(list_mark)))
-        lbl_file["text"] = f"Кодов в файле: {len(list_mark)}"
+        lbl_file["text"] = f"Количество кодов в файле excel - {len(list_mark)}"
         add_btn["state"] = "enabled"
         range_bso()
     except:
@@ -74,7 +72,7 @@ def range_bso():
         print(
             "Первый код диапазона - {0}. Последний код диапазона - {1}. Всего кодов в диапазоне {2}".format(first, last,
                                                                                                             all_codes))
-        rangeBso = ttk.Label(mark_frame,
+        rangeBso = ttk.Label(range_mark_frame,
                              text=f"{f_number} - {first} | {s_number} - {last}. Всего кодов в диапазоне {all_codes}".format(
                                  f_number, s_number, first, last, all_codes), font=font_size)
         rangeBso.pack(anchor=NW)
@@ -91,7 +89,7 @@ def range_bso():
         f_number += 2
         s_number += 2
         diap_count += 1
-    diap_file["text"] = f"Количество диапазонов в файле - {diap_count}"
+    diap_file["text"] = f"Количество диапазонов в файле excel - {diap_count}"
     # print("Рабочий список после удаления {0}".format(list_bso))
     # print("Обрезанный код для поиска {}".format(first_code[:8]))
     # print("До удаления {0}".format(list_bso[:10]))
@@ -101,21 +99,35 @@ def range_bso():
 
 
 def add_bso():
+    global f_number
+    global s_number
+    global search_list
+    global add_codes
     try:
-        global search_list
         search_seria = seria.get()
         search_na4alo = int(na4alo.get())
         search_konec = int(konec.get())
         if len(search_seria) == 3:
             if len(na4alo.get()) == 9:
                 if len(konec.get()) == 9:
+                    all_codes = search_konec - search_na4alo
+                    add_codes = add_codes + all_codes
+                    f_number += 1
+                    s_number += 2
+                    range_add = ttk.Label(range_add_frame,
+                                         text=f"{f_number} - {search_seria}{search_na4alo} | {s_number} - {search_seria}{search_konec}. Всего кодов в диапазоне {all_codes}".format(
+                                             f_number, s_number, search_seria, search_na4alo, search_konec, all_codes), font=font_size)
+                    range_add.pack(anchor=NW)
+                    count_in_diap["text"] = f"Количество кодов добавленных вручную - {add_codes}"
                     while search_na4alo <= search_konec:
                         search_result = f"{search_seria}{search_na4alo}"
                         search_list.append(search_result)
                         search_na4alo = search_na4alo + 1
                     rangeCount()
                     print("Коды которые ищем: {0}".format(search_list))
+                    # print(f"Конец - {search_konec} начало {search_na4alo} разность {all_codes}")
                     search_btn["state"] = "enabled"
+                    f_number = s_number
                 else:
                     print("Последний код в диапазоне должен состоять из 9 цифр")
                     print("Последний код {0}. Состоит из - {1} символов".format(search_konec, len(konec.get())))
@@ -167,13 +179,18 @@ def clear_all():
     global search_res
     global count
     global range_count
+    global f_number
+    global s_number
     list_mark = []
     search_list = []
     search_res = []
     count = 0
     range_count = 0
+    f_number = 0
+    s_number = 0
     text_count["text"] = "Количество добавленных диапазонов вручную -"
-    lbl_file["text"] = "Кодов в файле excel -"
+    lbl_file["text"] = "Количество кодов в файле excel -"
+    count_in_diap["text"] = "Количество кодов добавленных вручную -"
     text_searchRes["text"] = "Количество отсутствующих кодов в документе маркировки -"
     info_save["text"] = "Файл .txt сохраняется в ту же директорию, где находится файл .exe"
     title.delete(0, END)
@@ -185,9 +202,11 @@ def clear_all():
     add_btn["state"] = "disabled"
     search_btn["state"] = "disabled"
     save_btn["state"] = "disabled"
-    for widget in mark_frame.winfo_children():
+    for widget in range_mark_frame.winfo_children():
         widget.destroy()
-    diap_file["text"] = "Количество диапазонов в файле -"
+    for widget in range_add_frame.winfo_children():
+        widget.destroy()
+    diap_file["text"] = "Количество диапазонов в файле excel -"
     print("Очистка успешна!")
 
 
@@ -242,21 +261,24 @@ search_btn.pack(side=LEFT, anchor=NE, expand=True, fill=X, ipadx=10, ipady=10)
 bso_frame.pack(anchor=NW, fill=X)
 
 # Содержимое окна Информация
-info_frame = ttk.Frame(padding=5)
-mark_frame = ttk.Frame(padding=5)
+info_frame = ttk.Frame(padding=5, borderwidth=1, relief=SOLID)
+mark_frame = ttk.Frame(padding=5, borderwidth=1, relief=SOLID)
+range_mark_frame = ttk.Frame(mark_frame, padding=5)
+range_add_frame = ttk.Frame(info_frame, padding=5)
 name_infoFrame = ttk.Label(text="Информация", foreground="#E0FFFF", background="#00CED1", font=font_size)
-lbl_file = ttk.Label(info_frame, text="Кодов в файле excel -", font=font_size)
-diap_file = ttk.Label(info_frame, text="Количество диапазонов в файле -", font=font_size)
-line = ttk.Label(info_frame, text="____________________________________________________________________________",
-                 font=font_size)
+lbl_file = ttk.Label(mark_frame, text="Количество кодов в файле excel -", font=font_size)
+diap_file = ttk.Label(mark_frame, text="Количество диапазонов в файле excel -", font=font_size)
+count_in_diap = ttk.Label(info_frame, text="Количество кодов добавленных вручную -", font=font_size)
 text_count = ttk.Label(info_frame, text="Количество добавленных диапазонов вручную -", font=font_size)
 text_searchRes = ttk.Label(info_frame, text="Количество отсутствующих кодов в документе маркировки -", font=font_size)
 
 name_infoFrame.pack(anchor=NW, fill=X)
 mark_frame.pack(anchor=NW, fill=X)
+range_mark_frame.pack(anchor=NW, fill=X)
+range_add_frame.pack(anchor=NW, fill=X)
 lbl_file.pack(anchor=NW)
 diap_file.pack(anchor=NW)
-line.pack(anchor=NW)
+count_in_diap.pack(anchor=NW)
 text_count.pack(anchor=NW)
 text_searchRes.pack(anchor=NW)
 info_frame.pack(anchor=NW, fill=X)

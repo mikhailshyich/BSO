@@ -33,7 +33,7 @@ font_size = 10
 def open_file():
     try:
         global list_mark
-        filepath = filedialog.askopenfilename(filetypes=(("Файл .xls", " .xls"), ("Все файлы", "*")))
+        filepath = filedialog.askopenfilename(filetypes=(("Файл Excel (*.xls)", ".xls"), ("Все файлы", "*")))
         file = filepath.title()
         file = pd.read_excel(f'{file}')
         list_mark = file['БСО'].tolist()
@@ -115,8 +115,9 @@ def add_bso():
                     f_number += 1
                     s_number += 2
                     range_add = ttk.Label(range_add_frame,
-                                         text=f"{f_number} - {search_seria}{search_na4alo} | {s_number} - {search_seria}{search_konec}. Всего кодов в диапазоне {all_codes}".format(
-                                             f_number, s_number, search_seria, search_na4alo, search_konec, all_codes), font=font_size)
+                                          text=f"{f_number} - {search_seria}{search_na4alo} | {s_number} - {search_seria}{search_konec}. Всего кодов в диапазоне {all_codes}".format(
+                                              f_number, s_number, search_seria, search_na4alo, search_konec, all_codes),
+                                          font=font_size)
                     range_add.pack(anchor=NW)
                     count_in_diap["text"] = f"Количество кодов добавленных вручную - {add_codes}"
                     while search_na4alo <= search_konec:

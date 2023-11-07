@@ -106,16 +106,25 @@ def add_bso():
         search_seria = seria.get()
         search_na4alo = int(na4alo.get())
         search_konec = int(konec.get())
-        if len(search_seria) <= 3:
-            while search_na4alo <= search_konec:
-                search_result = f"{search_seria}{search_na4alo}"
-                search_list.append(search_result)
-                search_na4alo = search_na4alo + 1
-            rangeCount()
-            print("Коды которые ищем: {0}".format(search_list))
-            search_btn["state"] = "enabled"
+        if len(search_seria) == 3:
+            if len(na4alo.get()) == 9:
+                if len(konec.get()) == 9:
+                    while search_na4alo <= search_konec:
+                        search_result = f"{search_seria}{search_na4alo}"
+                        search_list.append(search_result)
+                        search_na4alo = search_na4alo + 1
+                    rangeCount()
+                    print("Коды которые ищем: {0}".format(search_list))
+                    search_btn["state"] = "enabled"
+                else:
+                    print("Последний код в диапазоне должен состоять из 9 цифр")
+                    print("Последний код {0}. Состоит из - {1} символов".format(search_konec, len(konec.get())))
+            else:
+                print("Первый код в диапазоне должен состоять из 9 цифр")
+                print("Первый код {0}. Состоит из - {1} символов".format(search_na4alo, len(na4alo.get())))
         else:
-            print("Серия БСО больше 3-х символов")
+            print("Серия БСО введена неверно")
+            print("Серия - {0}. Состоит из - {1} символов".format(search_seria, len(search_seria)))
     except:
         print("Не заполнены все нужные поля в разделе *Работа с диапазонами кодов*")
 

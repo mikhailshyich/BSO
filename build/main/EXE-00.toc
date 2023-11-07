@@ -4927,7 +4927,7 @@
  [],
  False,
  False,
- 1699373075,
+ 1699375610,
  [('run.exe',
    'C:\\Users\\shiich\\Desktop\\pythonProject\\BSO\\venv\\Lib\\site-packages\\PyInstaller\\bootloader\\Windows-64bit-intel\\run.exe',
    'EXECUTABLE')],

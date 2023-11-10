@@ -166,15 +166,15 @@ def save_file():
         # batch_n = batch.get()
         # prod_date_n = prod_date.get()
         # file_name = f"{title_n}_партия_{batch_n}_от_{prod_date_n}.txt"
-        file_name = f"Недостающие коды.txt"
+        file_name = "Недостающие коды.txt"
         file_bco = open(f"{file_name}", "w+")
         for item in search_res:
             file_bco.write("%s\n" % item)
         file_bco.close()
         dir = os.path.abspath(os.curdir)
         # print(f"Файл: {dir}\{title_n}_партия_{batch_n}_от_{prod_date_n}.txt".format(dir))
-        print(f"Файл: {file_name}".format(dir))
-        info_save["text"] = f"Файл: {file_name}".format(dir)
+        print(f"Файл:  {dir}\{file_name}".format(dir))
+        info_save["text"] = f"Файл:  {dir}\{file_name}".format(dir)
         null_btn["state"] = "enabled"
     except:
         print("Дата в неверном формате!")
@@ -330,9 +330,9 @@ downl_btn.pack(anchor="n", fill=X, expand=True, ipadx=10, ipady=10)  # разм�
 dwnld_frame.pack(fill=X)
 
 add_btn_BZ = ttk.Button(general_frameBZ, text="Добавить коды из документа маркировки .xls", state="disabled", cursor="plus")
-search_btn = ttk.Button(general_frameBZ, text="Поиск", command=searchRes, state="disabled", cursor="hand2")
+search_btn_BZ = ttk.Button(general_frameBZ, text="Поиск", command=searchRes, state="disabled", cursor="hand2")
 add_btn_BZ.pack(side=LEFT, anchor=NW, expand=True, fill=X, ipadx=10, ipady=10)
-search_btn.pack(side=LEFT, anchor=NE, expand=True, fill=X, ipadx=10, ipady=10)
+search_btn_BZ.pack(side=LEFT, anchor=NE, expand=True, fill=X, ipadx=10, ipady=10)
 
 
 # Запуск окна

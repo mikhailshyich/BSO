@@ -162,21 +162,22 @@ def searchRes():
 
 def save_file():
     try:
-        title_n = title.get()
-        batch_n = batch.get()
-        prod_date_n = prod_date.get()
-        file_name = f"{title_n}_партия_{batch_n}_от_{prod_date_n}.txt"
+        # title_n = title.get()
+        # batch_n = batch.get()
+        # prod_date_n = prod_date.get()
+        # file_name = f"{title_n}_партия_{batch_n}_от_{prod_date_n}.txt"
+        file_name = f"Недостающие коды.txt"
         file_bco = open(f"{file_name}", "w+")
         for item in search_res:
             file_bco.write("%s\n" % item)
         file_bco.close()
         dir = os.path.abspath(os.curdir)
-        print(f"Файл: {dir}\{title_n}_партия_{batch_n}_от_{prod_date_n}.txt".format(dir))
-        info_save["text"] = f"Файл: {dir}\{title_n}_партия_{batch_n}_от_{prod_date_n}.txt".format(dir)
+        # print(f"Файл: {dir}\{title_n}_партия_{batch_n}_от_{prod_date_n}.txt".format(dir))
+        print(f"Файл: {file_name}".format(dir))
+        info_save["text"] = f"Файл: {file_name}".format(dir)
         null_btn["state"] = "enabled"
     except:
         print("Дата в неверном формате!")
-
 
 def clear_all():
     global list_mark
@@ -198,9 +199,9 @@ def clear_all():
     count_in_diap["text"] = "Количество кодов добавленных вручную -"
     text_searchRes["text"] = "Количество отсутствующих кодов в документе маркировки -"
     info_save["text"] = "Файл .txt сохраняется в ту же директорию, где находится файл .exe"
-    title.delete(0, END)
-    batch.delete(0, END)
-    prod_date.delete(0, END)
+    # title.delete(0, END)
+    # batch.delete(0, END)
+    # prod_date.delete(0, END)
     seria.delete(0, END)
     na4alo.delete(0, END)
     konec.delete(0, END)
@@ -214,38 +215,60 @@ def clear_all():
     diap_file["text"] = "Количество диапазонов в файле excel -"
     print("Очистка успешна!")
 
-general_frame = ttk.Frame()
-general_frame.pack(fill=X)
+def hide_bso():
+    general_frameBSO.pack_forget()
+    general_frameBZ.pack(anchor="n", fill=X, expand=True, ipadx=5, ipady=5)
+    button_BSO["state"] = "enable"
+    button_BZ["state"] = "disable"
 
-dwnld_frame = ttk.Frame(general_frame, borderwidth=1, relief=SOLID, padding=5)
+def hide_bz():
+    general_frameBZ.pack_forget()
+    general_frameBSO.pack(anchor="n", fill=X, expand=True, ipadx=5, ipady=5)
+    button_BZ["state"] = "enable"
+    button_BSO["state"] = "disable"
+
+button_frame = ttk.Frame()
+button_frame.pack(side=TOP)
+
+button_BZ = ttk.Button(button_frame, text="Коды без защиты", command=hide_bso)
+button_BZ.pack(side=LEFT, fill=X, expand=True, ipadx=5, ipady=5)
+button_BSO = ttk.Button(button_frame, text="Защищённые коды БСО", command=hide_bz, state="disable")
+button_BSO.pack(side=RIGHT, fill=X, expand=True, ipadx=5, ipady=5)
+
+general_frameBSO = ttk.Frame()
+general_frameBSO.pack(fill=X)
+
+general_frameBZ = ttk.Frame()
+
+dwnld_frame = ttk.Frame(general_frameBSO, borderwidth=1, relief=SOLID, padding=5)
 downl_btn = ttk.Button(dwnld_frame, text="Загрузить документ маркировки формата .xls", command=open_file,
                        cursor="hand2")
 downl_btn.pack(anchor="n", fill=X, expand=True, ipadx=10, ipady=10)  # размещаем кнопку по центру окна
 dwnld_frame.pack(fill=X)
 
-# Содержимое окна номенклатура
-nomenkl_frame = ttk.Frame(general_frame, borderwidth=1, relief=SOLID, padding=5)
-name_nomenklFrame = ttk.Label(general_frame, text="Информация для файла .txt", foreground="#E0FFFF", background="#00CED1",
-                              font=font_size)
-name_title = ttk.Label(nomenkl_frame, text="Номенклатура", font=font_size)
-name_batch = ttk.Label(nomenkl_frame, text="Номер партии", font=font_size)
-name_prodDate = ttk.Label(nomenkl_frame, text="Дата производства", font=font_size)
-title = ttk.Entry(nomenkl_frame, font=font_size)
-batch = ttk.Entry(nomenkl_frame, font=font_size)
-prod_date = ttk.Entry(nomenkl_frame, font=font_size)
+# Содержимое окна номенклатура (защ. коды)
+# nomenkl_frame = ttk.Frame(general_frameBSO, borderwidth=1, relief=SOLID, padding=5)
+# name_nomenklFrame = ttk.Label(general_frame, text="Информация для файла .txt", foreground="#E0FFFF", background="#00CED1",
+#                               font=font_size)
+# name_title = ttk.Label(nomenkl_frame, text="Номенклатура", font=font_size)
+# name_batch = ttk.Label(nomenkl_frame, text="Номер партии", font=font_size)
+# name_prodDate = ttk.Label(nomenkl_frame, text="Дата производства", font=font_size)
+# title = ttk.Entry(nomenkl_frame, font=font_size)
+# batch = ttk.Entry(nomenkl_frame, font=font_size)
+# prod_date = ttk.Entry(nomenkl_frame, font=font_size)
+#
+# name_nomenklFrame.pack(anchor=NW, fill=X)
+# name_title.pack(anchor=NW)
+# title.pack(anchor=NW, fill=X)
+# name_batch.pack(anchor=NW)
+# batch.pack(anchor=NW, fill=X)
+# name_prodDate.pack(anchor=NW)
+# prod_date.pack(anchor=NW, fill=X)
+# nomenkl_frame.pack(anchor=NW, fill=X)
 
-name_nomenklFrame.pack(anchor=NW, fill=X)
-name_title.pack(anchor=NW)
-title.pack(anchor=NW, fill=X)
-name_batch.pack(anchor=NW)
-batch.pack(anchor=NW, fill=X)
-name_prodDate.pack(anchor=NW)
-prod_date.pack(anchor=NW, fill=X)
-nomenkl_frame.pack(anchor=NW, fill=X)
-
-# Содержимое окна БСО
-bso_frame = ttk.Frame(general_frame, borderwidth=1, relief=SOLID, padding=5)
-name_bsoFrame = ttk.Label(general_frame, text="Работа с диапазонами кодов", foreground="#E0FFFF", background="#00CED1", font=font_size)
+# Содержимое окна БСО (защ. коды)
+bso_frame = ttk.Frame(general_frameBSO, borderwidth=1, relief=SOLID, padding=5)
+name_bsoFrame = ttk.Label(general_frameBSO, text="Работа с диапазонами кодов", foreground="#E0FFFF", background="#00CED1", font=font_size)
 text_seria = ttk.Label(bso_frame, text="Серия БСО", font=font_size)
 text_na4alo = ttk.Label(bso_frame, text="Первый код диапазона", font=font_size)
 text_konec = ttk.Label(bso_frame, text="Последний код диапазона", font=font_size)
@@ -267,12 +290,12 @@ add_btn.pack(side=LEFT, anchor=NW, expand=True, fill=X, ipadx=10, ipady=10)
 search_btn.pack(side=LEFT, anchor=NE, expand=True, fill=X, ipadx=10, ipady=10)
 bso_frame.pack(anchor=NW, fill=X)
 
-# Содержимое окна Информация
-info_frame = ttk.Frame(general_frame, padding=5, borderwidth=1, relief=SOLID)
-mark_frame = ttk.Frame(general_frame, padding=5, borderwidth=1, relief=SOLID)
+# Содержимое окна Информация (защ. коды)
+info_frame = ttk.Frame(general_frameBSO, padding=5, borderwidth=1, relief=SOLID)
+mark_frame = ttk.Frame(general_frameBSO, padding=5, borderwidth=1, relief=SOLID)
 range_mark_frame = ttk.Frame(mark_frame, padding=5)
 range_add_frame = ttk.Frame(info_frame, padding=5)
-name_infoFrame = ttk.Label(general_frame, text="Информация", foreground="#E0FFFF", background="#00CED1", font=font_size)
+name_infoFrame = ttk.Label(general_frameBSO, text="Информация", foreground="#E0FFFF", background="#00CED1", font=font_size)
 lbl_file = ttk.Label(mark_frame, text="Количество кодов в файле excel -", font=font_size)
 diap_file = ttk.Label(mark_frame, text="Количество диапазонов в файле excel -", font=font_size)
 count_in_diap = ttk.Label(info_frame, text="Количество кодов добавленных вручную -", font=font_size)
@@ -290,7 +313,7 @@ text_count.pack(anchor=NW)
 text_searchRes.pack(anchor=NW)
 info_frame.pack(anchor=NW, fill=X)
 
-futter = ttk.Frame(general_frame, borderwidth=1, relief=SOLID, padding=5)
+futter = ttk.Frame(general_frameBSO, borderwidth=1, relief=SOLID, padding=5)
 futter.pack(anchor=SW, fill=X)
 info_save = ttk.Label(futter, text="Файл .txt сохраняется в ту же директорию, где находится файл .exe", font=font_size)
 info_save.pack(anchor=NW)
@@ -298,6 +321,19 @@ save_btn = ttk.Button(futter, text="Сохранить коды в файл", co
 null_btn = ttk.Button(futter, text="Очистить всё", command=clear_all, cursor="exchange")
 save_btn.pack(anchor="s", fill=X, expand=True, ipadx=10, ipady=10)  # размещаем кнопку по центру окна
 null_btn.pack(anchor="s", fill=X, expand=True, ipadx=5, ipady=5)  # размещаем кнопку по центру окна
+
+#Вкладка коды без защиты
+dwnld_frame = ttk.Frame(general_frameBZ, borderwidth=1, relief=SOLID, padding=5)
+downl_btn = ttk.Button(dwnld_frame, text="Загрузить документ маркировки формата .xls", command=open_file,
+                       cursor="hand2")
+downl_btn.pack(anchor="n", fill=X, expand=True, ipadx=10, ipady=10)  # размещаем кнопку по центру окна
+dwnld_frame.pack(fill=X)
+
+add_btn_BZ = ttk.Button(general_frameBZ, text="Добавить коды из документа маркировки .xls", state="disabled", cursor="plus")
+search_btn = ttk.Button(general_frameBZ, text="Поиск", command=searchRes, state="disabled", cursor="hand2")
+add_btn_BZ.pack(side=LEFT, anchor=NW, expand=True, fill=X, ipadx=10, ipady=10)
+search_btn.pack(side=LEFT, anchor=NE, expand=True, fill=X, ipadx=10, ipady=10)
+
 
 # Запуск окна
 root.mainloop()

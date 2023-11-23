@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import tkinter as tk
 import re
+import traceback
 
 from tkinter import *
 from tkinter import ttk
@@ -26,8 +27,8 @@ h = root.winfo_screenheight()
 w = w // 2  # середина экрана
 h = h // 2
 w = w - 450  # смещение от середины
-h = h - 530
-root.geometry('900x1000+{}+{}'.format(w, h))
+h = h - 430
+root.geometry('900x780+{}+{}'.format(w, h))
 font_size = 10
 
 
@@ -45,8 +46,8 @@ def open_file():
         lbl_file["text"] = f"Количество кодов в файле excel - {len(list_mark)}"
         add_btn["state"] = "enabled"
         range_bso()
-    except:
-        print("Что-то пошло не так")
+    except Exception as e:
+        print('Ошибка:\n', traceback.format_exc())
 
 
 def range_bso():

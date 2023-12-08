@@ -119,14 +119,17 @@ def add_bso():
                     add_codes = add_codes + all_codes
                     f_number += 1
                     s_number += 2
+                    na4aloPrint = str(search_na4alo).zfill(9)
+                    konecPrint = str(search_konec).zfill(9)
                     range_add = ttk.Label(range_add_frame,
-                                          text=f"{f_number} - {search_seria}{search_na4alo} | {s_number} - {search_seria}{search_konec}. Всего кодов в диапазоне {all_codes}".format(
+                                          text=f"{f_number} - {search_seria}{na4aloPrint} | {s_number} - {search_seria}{konecPrint}. Всего кодов в диапазоне {all_codes}".format(
                                               f_number, s_number, search_seria, search_na4alo, search_konec, all_codes),
                                           font=font_size)
                     range_add.pack(anchor=NW)
                     count_in_diap["text"] = f"Количество кодов добавленных вручную - {add_codes}"
                     while search_na4alo <= search_konec:
-                        search_result = f"{search_seria}{search_na4alo}"
+                        result = str(search_na4alo).zfill(9)
+                        search_result = f"{search_seria}{result}"
                         search_list.append(search_result)
                         search_na4alo = search_na4alo + 1
                     rangeCount()
